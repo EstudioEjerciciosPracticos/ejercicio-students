@@ -1,4 +1,4 @@
-package co.com.wfnar.api_student.application;
+package co.com.wfnar.api_student;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

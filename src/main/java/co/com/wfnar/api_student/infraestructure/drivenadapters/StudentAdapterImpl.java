@@ -28,5 +28,7 @@ public class StudentAdapterImpl implements StudentRepositoy {
                 .body(Student[].class);
 
         return Arrays.asList(students);
+
+        //return List.of();
     }
 }
