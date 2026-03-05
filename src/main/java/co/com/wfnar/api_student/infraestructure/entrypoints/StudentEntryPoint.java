@@ -131,7 +131,7 @@ public class StudentEntryPoint {
         return studentsByGroupAndGender;
     }
 
-    //Agrupaciones
+    //Transformaciones
     @GetMapping("/transformavanzadas/namebygrade")
     public Map<Integer, List<String>> getNameByGrade() {
         Map<Integer, List<String>> namesByGroup = studentUseCase.getAllStudents().stream()
