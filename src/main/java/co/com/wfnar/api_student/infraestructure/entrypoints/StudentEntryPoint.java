@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -130,4 +131,22 @@ public class StudentEntryPoint {
         return studentsByGroupAndGender;
     }
 
+    //Agrupaciones
+    @GetMapping("/transformavanzadas/namebygrade")
+    public Map<Integer, List<String>> getNameByGrade() {
+        Map<Integer, List<String>> namesByGroup = studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(Student::getGrade , (Collectors.mapping(Student::getFirstName, Collectors.toList()))));
+
+
+        return namesByGroup;
+    }
+
+    @GetMapping("/transformavanzadas/mayorbygrade")
+    public Map<Integer, Optional<Student>> getMayorAgeByGrade() {
+        Map<Integer, Optional<Student>> mayorAgeByGroup = studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(Student::getGrade , (Collectors.maxBy(Comparator.comparing(Student::getAge)))));
+
+
+        return mayorAgeByGroup;
+    }
 }
