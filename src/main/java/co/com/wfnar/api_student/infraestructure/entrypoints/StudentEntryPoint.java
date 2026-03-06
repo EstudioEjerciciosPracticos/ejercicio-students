@@ -21,6 +21,7 @@ public class StudentEntryPoint {
 
     private final StudentUseCase studentUseCase;
 
+/*
     @GetMapping
     public List<Student> getStudents() {
         return studentUseCase.getAllStudents();
@@ -36,6 +37,7 @@ public class StudentEntryPoint {
                 .findFirst()
                 .orElse(null);
     }
+*/
 
     //Operaciones básicas
 
@@ -207,5 +209,79 @@ public class StudentEntryPoint {
                 .collect(Collectors.groupingBy(Student::getGrade , Collectors.groupingBy(Student::getGender, Collectors.counting())));
 
     }
+
+    //Ejercicios Avanzados
+    @GetMapping("/ejeravanzados/gradewithmayorstudents")
+    public Optional<Map.Entry<Integer,Long>> getGradeWithMayorStudents() {
+
+        return studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(Student::getGrade , Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue());
+
+    }
+    //V2
+    @GetMapping("/ejeravanzados/gradewithmayorstudents2")
+    public Integer getGradeWithMayorStudents2() {
+
+        return studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(Student::getGrade , Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(0);
+
+    }
+
+    @GetMapping("/ejeravanzados/ethnichmayorstudents")
+    public Optional<Map.Entry<String,Long>> getEthnicGroupMostPopular() {
+
+        return studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(Student::getEthnicGroup , Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue());
+
+    }
+    //V2
+    @GetMapping("/ejeravanzados/ethnichmayorstudents2")
+    public String getEthnicGroupMostPopular2() {
+
+        return studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(Student::getEthnicGroup , Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(entry -> String.valueOf(entry.getKey())).orElse("No Data");
+
+    }
+
+    @GetMapping("/ejeravanzados/mapkeyidvaluestudent")
+    public Map<Integer, Student>  getKeyIdValueStudent() {
+
+        return studentUseCase.getAllStudents().stream()
+                .collect(Collectors.toMap(Student::getId , student -> student));
+
+    }
+
+
+    @GetMapping("/ejeravanzados/groupbyage")
+    public Map<String, List<Student>>  getGroupByAge() {
+
+        return studentUseCase.getAllStudents().stream()
+                .collect(Collectors.groupingBy(student -> calculateAgeRange(student.getAge())));
+
+    }
+
+    private String calculateAgeRange(int age){
+
+        String mayorRange = ( age >= 11 && age <= 14) ? "11 - 14" : "15 - 18";
+
+        return ( age >= 6 && age <= 10) ? "6 - 10" : mayorRange;
+
+    }
+
+
 
 }
